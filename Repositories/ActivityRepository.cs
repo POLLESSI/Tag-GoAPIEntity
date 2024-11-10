@@ -30,14 +30,18 @@ namespace MyApi.Repositories
         // Ajouter une nouvelle activité
         public async Task AddActivityAsync(Activity activity)
         {
-            await _context.Activities.AddAsync(activity);
-            await _context.SaveChangesAsync();
+            await _context.Activities
+                .AddAsync(activity);
+
+            await _context
+                .SaveChangesAsync();
         }
 
         // Mettre à jour une activité existante
         public async Task<bool> UpdateActivityAsync(Activity activity)
         {
-            var existingActivity = await _context.Activities.FindAsync(activity.Id);
+            var existingActivity = await _context.Activities
+                .FindAsync(activity.Id);
 
             if (existingActivity == null)
             {
@@ -47,7 +51,9 @@ namespace MyApi.Repositories
             existingActivity.Name = activity.Name;
 
             _context.Activities.Update(existingActivity);
+
             await _context.SaveChangesAsync();
+
             return true;
         }
 
@@ -62,6 +68,7 @@ namespace MyApi.Repositories
 
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();
+
             return true;
         }
     }
