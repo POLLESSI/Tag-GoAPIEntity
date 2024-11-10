@@ -41,14 +41,15 @@ namespace MyApi.Repositories
         public async Task<bool> UpdateActivityAsync(Activity activity)
         {
             var existingActivity = await _context.Activities
-                .FindAsync(activity.Id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == activity.Id);
 
             if (existingActivity == null)
             {
                 return false; // L'activité n'existe pas
             }
 
-            existingActivity.Name = activity.Name;
+            existingActivity = activity;
 
             _context.Activities.Update(existingActivity);
 
