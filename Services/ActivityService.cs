@@ -29,6 +29,9 @@ namespace MyApi.Services
         public async Task AddActivityAsync(Activity activity)
         {
             // Valider ou modifier l'activité avant l'ajout
+
+            activity.Active = true;
+
             await _activityRepository.AddActivityAsync(activity);
         }
 

@@ -9,6 +9,5 @@ namespace MyApi.DTOs
         public string? Description { get; set; }
         public string? AdditionalInformation { get; set; }
         public string? Location { get; set; } 
-        public bool Active { get; set; }
     }
 }
