@@ -20,6 +20,14 @@ namespace MyApi.Repositories
                 .ToListAsync();
         }
 
+        // Récupérer toutes les activités
+        public async Task<IEnumerable<Activity>> GetAllActivitiesNoneArchivedAsync()
+        {
+            return await _context.Activities
+                .Where(activity => activity.Active) // Filtre les activités non archivées
+                .ToListAsync();
+        }
+
         // Récupérer une activité par ID
         public async Task<Activity?> GetActivityByIdAsync(int id)
         {

@@ -7,6 +7,7 @@ namespace MyApi.Services
     public interface IActivityService
     {
         Task<IEnumerable<Activity>> GetAllActivitiesAsync();
+        Task<IEnumerable<Activity>> GetAllActivitiesNoneArchivedAsync();
         Task<Activity?> GetActivityByIdAsync(int id);
         Task AddActivityAsync(Activity activity);
         Task<bool> UpdateActivityAsync(Activity activity);

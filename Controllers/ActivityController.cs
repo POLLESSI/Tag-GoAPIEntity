@@ -36,6 +36,18 @@ namespace MyApi.Controllers
             return Ok(activityDtos);
         }
 
+        [HttpGet("active")]
+        // [Authorize]
+        public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivitiesNoneArchived()
+        {
+            var activities = await _activityService.GetAllActivitiesNoneArchivedAsync();
+            
+            // Utiliser AutoMapper pour transformer la liste d'entités en DTOs
+            var activityDtos = _mapper.Map<IEnumerable<ActivityDto>>(activities);
+
+            return Ok(activityDtos);
+        }
+
         // GET: api/Activity/5
         [HttpGet("{id}")]
         // [Authorize]
@@ -90,7 +102,29 @@ namespace MyApi.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok(activity);
+        }
+
+        // PUT: api/Activity/5
+        [HttpPatch("patch/{id}")]
+        // [Authorize]
+        public async Task<IActionResult> UpdateActivity(int id)
+        {
+            var activity = await _activityService.GetActivityByIdAsync(id);
+
+            var updated = false;
+
+            if (activity != null) {
+                activity.Active = false;
+                updated = await _activityService.UpdateActivityAsync(activity);
+            }
+
+            if (!updated)
+            {
+                return NotFound();
+            }
+
+           return Ok(activity);
         }
 
         // DELETE: api/Activity/5
@@ -105,7 +139,7 @@ namespace MyApi.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok();
         }
     }
 }

@@ -20,6 +20,12 @@ namespace MyApi.Services
             return await _activityRepository.GetAllActivitiesAsync();
         }
 
+        public async Task<IEnumerable<Activity>> GetAllActivitiesNoneArchivedAsync()
+        {
+            // Logique métier éventuelle avant d'appeler le repository
+            return await _activityRepository.GetAllActivitiesNoneArchivedAsync();
+        }
+
         public async Task<Activity?> GetActivityByIdAsync(int id)
         {
             // Logique métier pour vérifier des conditions avant la récupération
