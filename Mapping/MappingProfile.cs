@@ -14,6 +14,11 @@ namespace MyApi.Mappings
             CreateMap<ActivityDto, Activity>();
             CreateMap<ActivityCreationDto, Activity>();
             CreateMap<ActivityEditionDto, Activity>();
+
+            CreateMap<User, UserDto>();
+
+            CreateMap<UserDto, User>();
+            CreateMap<UserCreationDto, User>();
         }
     }
 }

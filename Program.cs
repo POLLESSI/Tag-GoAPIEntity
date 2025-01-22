@@ -35,6 +35,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 25)))
     );
 
+// Configuration de l'authentification JWT
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
 var app = builder.Build();
 
 // Configuration du pipeline HTTP

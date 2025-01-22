@@ -11,6 +11,7 @@ namespace MyApi.Data
         }
 
         public required DbSet<Activity> Activities { get; set; }
+        public required DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
