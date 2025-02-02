@@ -24,7 +24,7 @@ namespace MyApi.Controllers
         }
 
         [HttpGet]
-        // [Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             var users = await _userService.GetUsersAsync();
@@ -33,7 +33,7 @@ namespace MyApi.Controllers
         }
 
         [HttpGet("{id}")]
-        // [Authorize]
+        [Authorize]
         public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -46,6 +46,7 @@ namespace MyApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateUser(UserCreationDto userDto)
         {
             var user = _mapper.Map<User>(userDto);
@@ -55,7 +56,7 @@ namespace MyApi.Controllers
         }
 
         [HttpPut]
-        // [Authorize]
+        [Authorize]
         public async Task<IActionResult> UpdateUser(UserEditionDto userDto)
         {
             var user = await _userService.GetUserByIdAsync(userDto.Id);
@@ -69,7 +70,7 @@ namespace MyApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        // [Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _userService.DeleteUserAsync(id);

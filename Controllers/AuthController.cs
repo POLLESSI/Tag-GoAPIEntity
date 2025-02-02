@@ -38,18 +38,19 @@ namespace MyApi.Controllers
             }
 
             // Si l'utilisateur est trouvé et que le mot de passe est correct, générer le token JWT
-            var token = GenerateJwtToken(user.Email);
+            var token = GenerateJwtToken(user.Email, user.Role);
             return Ok(new { Token = token });
         }
 
-        private string GenerateJwtToken(string email)
+        private string GenerateJwtToken(string email, string role)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, role) // Ajout du rôle ici
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret));
