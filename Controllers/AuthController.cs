@@ -8,6 +8,7 @@ using System.Text;
 using MyApi.Services;
 using MyApi.DTOs;
 using MyApi.Helpers;
+using MyApi.Repositories;
 
 namespace MyApi.Controllers
 {
@@ -38,11 +39,11 @@ namespace MyApi.Controllers
             }
 
             // Si l'utilisateur est trouvé et que le mot de passe est correct, générer le token JWT
-            var token = GenerateJwtToken(user.Email, user.Role);
+            var token = GenerateJwtToken(user.Email, user.Role, user.Id);
             return Ok(new { Token = token });
         }
 
-        private string GenerateJwtToken(string email, string role)
+        private string GenerateJwtToken(string email, string role, int id)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
@@ -50,7 +51,8 @@ namespace MyApi.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Email, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, role) // Ajout du rôle ici
+                new Claim(ClaimTypes.Role, role), // Ajout du rôle ici
+                new Claim(ClaimTypes.NameIdentifier, id.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret));

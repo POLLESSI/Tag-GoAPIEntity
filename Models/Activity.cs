@@ -30,6 +30,7 @@ namespace MyApi.Models
         public bool Active { get; set; }
 
         // Navigation property
-        // public int Organisateur_Id { get; set; }
+        // [Required]
+        public int OrganisatorId { get; set; }
     }
 }

@@ -46,7 +46,7 @@ namespace MyApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> CreateUser(UserCreationDto userDto)
         {
             var user = _mapper.Map<User>(userDto);
