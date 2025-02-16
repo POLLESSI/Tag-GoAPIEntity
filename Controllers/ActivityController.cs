@@ -25,7 +25,7 @@ namespace MyApi.Controllers
 
         // GET: api/Activity
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetActivities()
         {
             var activities = await _activityService.GetAllActivitiesAsync();
@@ -37,7 +37,7 @@ namespace MyApi.Controllers
         }
 
         [HttpGet("active")]
-        [Authorize(Roles = $"{Roles.ADMIN}, ${Roles.DEFAULT}")]
+        [Authorize(Roles = $"{Roles.DEFAULT}, {Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivitiesNoneArchived()
         {
             var activities = await _activityService.GetAllActivitiesNoneArchivedAsync();
@@ -50,7 +50,7 @@ namespace MyApi.Controllers
 
         // GET: api/Activity/5
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<ActivityDto>> GetActivity(int id)
         {
             var activity = await _activityService.GetActivityByIdAsync(id);
@@ -68,7 +68,7 @@ namespace MyApi.Controllers
 
         // POST: api/Activity
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<ActivityDto>> CreateActivity(ActivityCreationDto activityDto)
         {
             // Mapper le DTO vers l'entité Activity
@@ -84,7 +84,7 @@ namespace MyApi.Controllers
 
         // PUT: api/Activity/5
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<IActionResult> UpdateActivity(int id, ActivityEditionDto activityDto)
         {
             if (id != activityDto.Id)
@@ -107,7 +107,7 @@ namespace MyApi.Controllers
 
         // PUT: api/Activity/5
         [HttpPatch("patch/{id}")]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<IActionResult> UpdateActivity(int id)
         {
             var activity = await _activityService.GetActivityByIdAsync(id);
@@ -129,7 +129,7 @@ namespace MyApi.Controllers
 
         // DELETE: api/Activity/5
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<IActionResult> DeleteActivity(int id)
         {
             var deleted = await _activityService.DeleteActivityAsync(id);
