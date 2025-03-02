@@ -1,6 +1,8 @@
+
 using AutoMapper;
-using MyApi.DTOs;
-using MyApi.Models;
+using MyApi.Application.DTOs.ActivityDTOs;
+using MyApi.Application.DTOs.UserDTOs;
+using MyApi.Domain.Entities;
 
 namespace MyApi.Mappings
 {
@@ -9,16 +11,16 @@ namespace MyApi.Mappings
         public MappingProfile()
         {
             // Mappages pour Activity et DTOs
-            CreateMap<Activity, ActivityDto>();
+            CreateMap<ActivityEntity, ActivityDto>();
 
-            CreateMap<ActivityDto, Activity>();
-            CreateMap<ActivityCreationDto, Activity>();
-            CreateMap<ActivityEditionDto, Activity>();
+            CreateMap<ActivityDto, ActivityEntity>();
+            CreateMap<ActivityCreationDto, ActivityEntity>();
+            CreateMap<ActivityEditionDto, ActivityEntity>();
 
-            CreateMap<User, UserDto>();
+            CreateMap<UserEntity, UserDto>();
 
-            CreateMap<UserDto, User>();
-            CreateMap<UserCreationDto, User>();
+            CreateMap<UserDto, UserEntity>();
+            CreateMap<UserCreationDto, UserEntity>();
         }
     }
 }

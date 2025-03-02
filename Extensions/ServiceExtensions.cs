@@ -1,5 +1,7 @@
-using MyApi.Repositories;
-using MyApi.Services;
+using MyApi.Application.Services;
+using MyApi.Application.Services.Interfaces;
+using MyApi.Domain.Interfaces;
+using MyApi.Infrastructure.Repositories;
 
 namespace MyApi.Extensions
 {
