@@ -46,10 +46,10 @@ namespace MyApi.API.Controllers
 
         [HttpPost]
         // [Authorize]
-        public async Task<IActionResult> CreateUser(UserCreationDto userDto)
+        public async Task<IActionResult> CreateUserDefault(UserCreationDto userDto)
         {
             var user = _mapper.Map<UserEntity>(userDto);
-            await _userService.AddUserAsync(user);
+            await _userService.AddUserDefaultAsync(user);
             var createdUserDto = _mapper.Map<UserDto>(user);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, createdUserDto);
         }

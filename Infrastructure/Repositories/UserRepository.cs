@@ -32,7 +32,7 @@ namespace MyApi.Infrastructure.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task AddUserAsync(UserEntity user)
+        public async Task AddUserDefaultAsync(UserEntity user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);

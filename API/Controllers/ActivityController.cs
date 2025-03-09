@@ -5,6 +5,7 @@ using AutoMapper;
 using MyApi.Application.DTOs.ActivityDTOs;
 using MyApi.Application.Services.Interfaces;
 using MyApi.Domain.Entities;
+using MyApi.Constants;
 
 namespace MyApi.API.Controllers
 {

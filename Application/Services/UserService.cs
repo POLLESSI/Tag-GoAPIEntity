@@ -1,4 +1,5 @@
 using MyApi.Application.Services.Interfaces;
+using MyApi.Constants;
 using MyApi.Domain.Entities;
 using MyApi.Domain.Interfaces;
 
@@ -28,9 +29,10 @@ namespace MyApi.Application.Services
             return await _userRepository.GetUserByEmailAsync(email);
         }
 
-        public async Task AddUserAsync(UserEntity user)
+        public async Task AddUserDefaultAsync(UserEntity user)
         {
-            await _userRepository.AddUserAsync(user);
+            user.Role = Roles.DEFAULT;
+            await _userRepository.AddUserDefaultAsync(user);
         }
 
         public async Task UpdateUserAsync(UserEntity user)

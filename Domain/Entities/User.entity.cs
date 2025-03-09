@@ -5,7 +5,6 @@ namespace MyApi.Domain.Entities
     public class UserEntity
     {   
         [Key]
-        [Required]
         public int Id { get; set; }
             
         public string? Name { get; set; }
