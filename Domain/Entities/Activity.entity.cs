@@ -30,7 +30,6 @@ namespace MyApi.Domain.Entities
         public bool Active { get; set; }
 
         // Navigation property
-        // [Required]
-        public int OrganisatorId { get; set; }
+        public ICollection<UserEntity> Organizers { get; set; } = [];
     }
 }

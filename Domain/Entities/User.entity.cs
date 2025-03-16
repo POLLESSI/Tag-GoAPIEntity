@@ -17,5 +17,9 @@ namespace MyApi.Domain.Entities
 
         [Required]
         public required string Role { get; set; }
+
+
+        // Navigation property
+        public ICollection<ActivityEntity> OrganizedActivities { get; set; } = [];
     }
 }
