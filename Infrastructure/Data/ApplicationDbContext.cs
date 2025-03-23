@@ -17,7 +17,15 @@ namespace MyApi.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            
+            modelBuilder.Entity<ActivityEntity>()
+                .HasMany(a => a.Organizers)
+                .WithMany(u => u.OrganizedActivities)
+                .UsingEntity(j => j.ToTable("ActivityOrganizers"));
+
+             modelBuilder.Entity<ActivityEntity>()
+                .HasMany(a => a.Registereds)
+                .WithMany(u => u.RegisteredActivities)
+                .UsingEntity(j => j.ToTable("ActivityRegistrations"));
         }
     }
 }

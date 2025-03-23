@@ -36,7 +36,7 @@ namespace MyApi.API.Controllers
         }
 
         [HttpGet("active")]
-        [Authorize(Roles = $"{Roles.DEFAULT}, {Roles.MODERATOR}, {Roles.ADMIN}")]
+        [Authorize(Roles = $"{Roles.USER_LAMBDA}, {Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivitiesNoneArchived()
         {
             var activities = await _activityService.GetAllActivitiesNoneArchivedAsync();
@@ -67,7 +67,7 @@ namespace MyApi.API.Controllers
 
         // POST: api/ActivityEntity
         [HttpPost]
-        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_LAMBDA}")]
         public async Task<ActionResult<ActivityDto>> CreateActivity(ActivityCreationDto activityDto)
         {
             // Mapper le DTO vers l'entité ActivityEntity

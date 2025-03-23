@@ -21,5 +21,6 @@ namespace MyApi.Domain.Entities
 
         // Navigation property
         public ICollection<ActivityEntity> OrganizedActivities { get; set; } = [];
+        public ICollection<ActivityEntity> RegisteredActivities { get; set; } = [];
     }
 }

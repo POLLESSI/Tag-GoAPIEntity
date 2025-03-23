@@ -31,5 +31,6 @@ namespace MyApi.Domain.Entities
 
         // Navigation property
         public ICollection<UserEntity> Organizers { get; set; } = [];
+        public ICollection<UserEntity> Registereds { get; set; } = [];
     }
 }

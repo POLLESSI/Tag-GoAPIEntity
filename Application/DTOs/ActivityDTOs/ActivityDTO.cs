@@ -12,5 +12,7 @@ namespace MyApi.Application.DTOs.ActivityDTOs
         public string? AdditionalInformation { get; set; }
         public string? Location { get; set; } 
         public bool Active { get; set; }
+
+        
     }
 }
