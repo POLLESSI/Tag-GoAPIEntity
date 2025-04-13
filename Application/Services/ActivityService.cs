@@ -1,16 +1,19 @@
 using MyApi.Application.Services.Interfaces;
 using MyApi.Domain.Entities;
 using MyApi.Domain.Interfaces;
+using System.Security.Claims;
 
 namespace MyApi.Application.Services
 {
     public class ActivityService : IActivityService
     {
         private readonly IActivityRepository _activityRepository;
+        private readonly IUserRepository _userRepository;
 
-        public ActivityService(IActivityRepository activityRepository)
+        public ActivityService(IActivityRepository activityRepository, IUserRepository userRepository)
         {
             _activityRepository = activityRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<IEnumerable<ActivityEntity>> GetAllActivitiesAsync()
@@ -31,9 +34,16 @@ namespace MyApi.Application.Services
             return await _activityRepository.GetActivityByIdAsync(id);
         }
 
-        public async Task AddActivityAsync(ActivityEntity activity)
+        public async Task AddActivityAsync(ActivityEntity activity, int organizerId)
         {
-            // Valider ou modifier l'activité avant l'ajout
+            UserEntity? user = await _userRepository.GetUserByIdAsync(organizerId);
+            
+            if (user == null)
+            {
+                throw new ArgumentException($"User with ID {organizerId} not found.");               
+            }
+     
+            activity.Organizers.Add(user);
 
             activity.Active = true;
 

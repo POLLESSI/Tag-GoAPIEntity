@@ -7,7 +7,7 @@ namespace MyApi.Application.Services.Interfaces
         Task<IEnumerable<ActivityEntity>> GetAllActivitiesAsync();
         Task<IEnumerable<ActivityEntity>> GetAllActivitiesNoneArchivedAsync();
         Task<ActivityEntity?> GetActivityByIdAsync(int id);
-        Task AddActivityAsync(ActivityEntity activity);
+        Task AddActivityAsync(ActivityEntity activity, int organizerId);
         Task<bool> UpdateActivityAsync(ActivityEntity activity);
         Task<bool> DeleteActivityAsync(int id);
     }

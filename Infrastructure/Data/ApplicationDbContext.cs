@@ -22,7 +22,7 @@ namespace MyApi.Infrastructure.Data
                 .WithMany(u => u.OrganizedActivities)
                 .UsingEntity(j => j.ToTable("ActivityOrganizers"));
 
-             modelBuilder.Entity<ActivityEntity>()
+            modelBuilder.Entity<ActivityEntity>()
                 .HasMany(a => a.Registereds)
                 .WithMany(u => u.RegisteredActivities)
                 .UsingEntity(j => j.ToTable("ActivityRegistrations"));

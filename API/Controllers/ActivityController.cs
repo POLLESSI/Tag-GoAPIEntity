@@ -6,6 +6,7 @@ using MyApi.Application.DTOs.ActivityDTOs;
 using MyApi.Application.Services.Interfaces;
 using MyApi.Domain.Entities;
 using MyApi.Constants;
+using System.Security.Claims;
 
 namespace MyApi.API.Controllers
 {
@@ -36,7 +37,7 @@ namespace MyApi.API.Controllers
         }
 
         [HttpGet("active")]
-        [Authorize(Roles = $"{Roles.USER_LAMBDA}, {Roles.MODERATOR}, {Roles.ADMIN}")]
+        [Authorize(Roles = $"{Roles.USER_LAMBDA}, {Roles.USER_ENTERPRISE}, {Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivitiesNoneArchived()
         {
             var activities = await _activityService.GetAllActivitiesNoneArchivedAsync();
@@ -67,13 +68,15 @@ namespace MyApi.API.Controllers
 
         // POST: api/ActivityEntity
         [HttpPost]
-        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_LAMBDA}")]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_ENTERPRISE}")]
         public async Task<ActionResult<ActivityDto>> CreateActivity(ActivityCreationDto activityDto)
         {
+            int organizerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
             // Mapper le DTO vers l'entité ActivityEntity
             var activity = _mapper.Map<ActivityEntity>(activityDto);
 
-            await _activityService.AddActivityAsync(activity);
+            await _activityService.AddActivityAsync(activity, organizerId);
 
             // Retourner l'entité créée sous forme de DTO
             var createdActivityDto = _mapper.Map<ActivityDto>(activity);
