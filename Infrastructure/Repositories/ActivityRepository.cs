@@ -35,6 +35,7 @@ namespace MyApi.Infrastructure.Repositories
         public async Task<ActivityEntity?> GetActivityByIdAsync(int id)
         {
             return await _context.Activities
+                .Include(activity => activity.Organizers)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
