@@ -6,6 +6,7 @@ using MyApi.Application.DTOs.ActivityDTOs;
 using MyApi.Application.Services.Interfaces;
 using MyApi.Domain.Entities;
 using MyApi.Constants;
+using System.Security.Claims;
 
 namespace MyApi.API.Controllers
 {
@@ -36,7 +37,7 @@ namespace MyApi.API.Controllers
         }
 
         [HttpGet("active")]
-        [Authorize(Roles = $"{Roles.DEFAULT}, {Roles.MODERATOR}, {Roles.ADMIN}")]
+        [Authorize(Roles = $"{Roles.USER_LAMBDA}, {Roles.USER_ENTERPRISE}, {Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivitiesNoneArchived()
         {
             var activities = await _activityService.GetAllActivitiesNoneArchivedAsync();
@@ -67,13 +68,15 @@ namespace MyApi.API.Controllers
 
         // POST: api/ActivityEntity
         [HttpPost]
-        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_ENTERPRISE}")]
         public async Task<ActionResult<ActivityDto>> CreateActivity(ActivityCreationDto activityDto)
         {
+            int organizerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
             // Mapper le DTO vers l'entité ActivityEntity
             var activity = _mapper.Map<ActivityEntity>(activityDto);
 
-            await _activityService.AddActivityAsync(activity);
+            await _activityService.AddActivityAsync(activity, organizerId);
 
             // Retourner l'entité créée sous forme de DTO
             var createdActivityDto = _mapper.Map<ActivityDto>(activity);
@@ -83,9 +86,12 @@ namespace MyApi.API.Controllers
 
         // PUT: api/ActivityEntity/5
         [HttpPut("{id}")]
-        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_ENTERPRISE}")]
         public async Task<IActionResult> UpdateActivity(int id, ActivityEditionDto activityDto)
         {
+            int organizerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            string role = User.FindFirst(ClaimTypes.Role)?.Value ?? "0";
+
             if (id != activityDto.Id)
             {
                 return BadRequest();
@@ -94,7 +100,7 @@ namespace MyApi.API.Controllers
             // Mapper le DTO vers l'entité ActivityEntity à mettre à jour
             var activity = _mapper.Map<ActivityEntity>(activityDto);
 
-            var updated = await _activityService.UpdateActivityAsync(activity);
+            var updated = await _activityService.UpdateActivityAsync(activity, organizerId, role);
 
             if (!updated)
             {
@@ -106,32 +112,25 @@ namespace MyApi.API.Controllers
 
         // PUT: api/ActivityEntity/5
         [HttpPatch("patch/{id}")]
-        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
-        public async Task<IActionResult> UpdateActivity(int id)
+        [Authorize(Roles = $"{Roles.ADMIN}")]
+        public async Task<IActionResult> ArchiveActivity(int id)
         {
-            var activity = await _activityService.GetActivityByIdAsync(id);
+            string role = User.FindFirst(ClaimTypes.Role)?.Value ?? "0";
 
-            var updated = false;
+            await _activityService.ArchiveActivityAsync(id, role);
 
-            if (activity != null) {
-                activity.Active = false;
-                updated = await _activityService.UpdateActivityAsync(activity);
-            }
-
-            if (!updated)
-            {
-                return NotFound();
-            }
-
-           return Ok(activity);
+            return Ok();
         }
 
         // DELETE: api/ActivityEntity/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
+        [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_ENTERPRISE}")]
         public async Task<IActionResult> DeleteActivity(int id)
         {
-            var deleted = await _activityService.DeleteActivityAsync(id);
+            int organizerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            string role = User.FindFirst(ClaimTypes.Role)?.Value ?? "0";
+
+            var deleted = await _activityService.DeleteActivityAsync(id, organizerId, role);
 
             if (!deleted)
             {

@@ -1,4 +1,6 @@
 
+using MyApi.Application.DTOs.UserDTOs;
+
 namespace MyApi.Application.DTOs.ActivityDTOs      
 {
     public class ActivityDto
@@ -12,5 +14,6 @@ namespace MyApi.Application.DTOs.ActivityDTOs
         public string? AdditionalInformation { get; set; }
         public string? Location { get; set; } 
         public bool Active { get; set; }
+        public ICollection<UserDto> Organizers { get; set; } = [];
     }
 }

@@ -31,7 +31,7 @@ namespace MyApi.Application.Services
 
         public async Task AddUserDefaultAsync(UserEntity user)
         {
-            user.Role = Roles.DEFAULT;
+            user.Role = Roles.USER_LAMBDA;
             await _userRepository.AddUserDefaultAsync(user);
         }
 

@@ -27,6 +27,7 @@ namespace MyApi.Infrastructure.Repositories
         {
             return await _context.Activities
                 .Where(activity => activity.Active) // Filtre les activités non archivées
+                .Include(activity => activity.Organizers)
                 .ToListAsync();
         }
 
@@ -34,6 +35,7 @@ namespace MyApi.Infrastructure.Repositories
         public async Task<ActivityEntity?> GetActivityByIdAsync(int id)
         {
             return await _context.Activities
+                .Include(activity => activity.Organizers)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 

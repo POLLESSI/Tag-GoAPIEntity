@@ -128,7 +128,7 @@
       },
       "55XXHJbx2qgVpHaZ65zmV": {
         "id": "55XXHJbx2qgVpHaZ65zmV",
-        "name": "Inscription",
+        "name": "ActivityRegistrations",
         "comment": "Association",
         "columnIds": [
           "5xh4ywzGJqpl790TeoZrb",
@@ -144,18 +144,18 @@
           "x": 704,
           "y": 20,
           "zIndex": 310,
-          "widthName": 60,
-          "widthComment": 63,
+          "widthName": 119,
+          "widthComment": 67,
           "color": ""
         },
         "meta": {
-          "updateAt": 1742117963237,
+          "updateAt": 1742723709965,
           "createAt": 1742117869857
         }
       },
       "a8sZXeAbiMZJHX78agGoN": {
         "id": "a8sZXeAbiMZJHX78agGoN",
-        "name": "ActivityEntityUserEntity",
+        "name": "ActivityOrganizers",
         "comment": "Association",
         "columnIds": [
           "qmCyc9VAyj74woHVZKiJN",
@@ -172,12 +172,12 @@
           "x": 714,
           "y": 488,
           "zIndex": 347,
-          "widthName": 125,
-          "widthComment": 63,
+          "widthName": 106,
+          "widthComment": 67,
           "color": ""
         },
         "meta": {
-          "updateAt": 1742119700214,
+          "updateAt": 1742723697775,
           "createAt": 1742117972370
         }
       }
@@ -1071,7 +1071,7 @@
       -1,
       {
         "comment": 1742117878435,
-        "name": 1742117892248
+        "name": 1742723709964
       }
     ],
     "5xh4ywzGJqpl790TeoZrb": [
@@ -1127,7 +1127,7 @@
       1742117972368,
       -1,
       {
-        "name": 1742119692933,
+        "name": 1742723697774,
         "comment": 1742118000166
       }
     ],
