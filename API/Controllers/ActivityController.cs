@@ -36,7 +36,7 @@ namespace MyApi.API.Controllers
             return Ok(activityDtos);
         }
 
-        [HttpGet("active")]
+        [HttpGet("ActivityActive")]
         [Authorize(Roles = $"{Roles.USER_LAMBDA}, {Roles.USER_ENTERPRISE}, {Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivitiesNoneArchived()
         {
