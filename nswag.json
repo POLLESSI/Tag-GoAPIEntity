@@ -9,6 +9,10 @@
     }
   },
   "codeGenerators": {
+    "typescript": {
+      "clientBaseUrl": "http://localhost:5009/api/",
+      "template": "angular"
+    },
     "openApiToTypeScriptClient": {
       "className": "ApiClient",
       "moduleName": "",

@@ -360,8 +360,8 @@ export class ApiClient {
     /**
      * @return OK
      */
-    patch(id: number): Observable<void> {
-        let url_ = this.baseUrl + "/api/Activity/patch/{id}";
+    activityArchive(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/api/Activity/ActivityArchive/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -375,11 +375,11 @@ export class ApiClient {
         };
 
         return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processPatch(response_);
+            return this.processActivityArchive(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processPatch(response_ as any);
+                    return this.processActivityArchive(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<void>;
                 }
@@ -388,7 +388,7 @@ export class ApiClient {
         }));
     }
 
-    protected processPatch(response: HttpResponseBase): Observable<void> {
+    protected processActivityArchive(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

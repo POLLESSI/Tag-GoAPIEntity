@@ -7,3 +7,6 @@
 ## Instalation:
 4) dotnet tool install --global dotnet-ef
 
+## Creation Service API Angular
+1) nswag run nswag.json                         // Créer le api-client.ts files pour Angular
+

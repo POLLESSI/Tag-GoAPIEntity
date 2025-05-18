@@ -28,10 +28,12 @@ namespace MyApi.API.Controllers
         [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetActivities()
         {
-            var activities = await _activityService.GetAllActivitiesAsync();
-            
-            // Utiliser AutoMapper pour transformer la liste d'entités en DTOs
-            var activityDtos = _mapper.Map<IEnumerable<ActivityDto>>(activities);
+            IEnumerable<ActivityDto> activityDtos = await _activityService.GetAllActivitiesAsync();
+
+            if (activityDtos == null || !activityDtos.Any())
+            {
+                return NotFound();
+            }
 
             return Ok(activityDtos);
         }
@@ -40,10 +42,12 @@ namespace MyApi.API.Controllers
         [Authorize(Roles = $"{Roles.USER_LAMBDA}, {Roles.USER_ENTERPRISE}, {Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivitiesNoneArchived()
         {
-            var activities = await _activityService.GetAllActivitiesNoneArchivedAsync();
+            IEnumerable<ActivityDto> activityDtos  = await _activityService.GetAllActivitiesNoneArchivedAsync();
             
-            // Utiliser AutoMapper pour transformer la liste d'entités en DTOs
-            var activityDtos = _mapper.Map<IEnumerable<ActivityDto>>(activities);
+            if (activityDtos == null || !activityDtos.Any())
+            {
+                return NotFound();
+            }
 
             return Ok(activityDtos);
         }
@@ -53,15 +57,12 @@ namespace MyApi.API.Controllers
         [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}")]
         public async Task<ActionResult<ActivityDto>> GetActivity(int id)
         {
-            var activity = await _activityService.GetActivityByIdAsync(id);
+            ActivityDto? activityDto = await _activityService.GetActivityByIdAsync(id);
 
-            if (activity == null)
+            if (activityDto == null)
             {
                 return NotFound();
             }
-
-            // Mapper l'entité ActivityEntity vers ActivityDto
-            var activityDto = _mapper.Map<ActivityDto>(activity);
 
             return Ok(activityDto);
         }
@@ -69,57 +70,71 @@ namespace MyApi.API.Controllers
         // POST: api/ActivityEntity
         [HttpPost]
         [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_ENTERPRISE}")]
-        public async Task<ActionResult<ActivityDto>> CreateActivity(ActivityCreationDto activityDto)
+        public async Task<ActionResult<ActivityDto>> CreateActivity(ActivityCreationDto activityCreationDto)
         {
             int organizerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
 
-            // Mapper le DTO vers l'entité ActivityEntity
-            var activity = _mapper.Map<ActivityEntity>(activityDto);
+            ActivityDto activityDto = await _activityService.AddActivityAsync(activityCreationDto, organizerId);
 
-            await _activityService.AddActivityAsync(activity, organizerId);
+            if (activityDto == null)
+            {
+                return BadRequest();
+            }
 
-            // Retourner l'entité créée sous forme de DTO
-            var createdActivityDto = _mapper.Map<ActivityDto>(activity);
-
-            return CreatedAtAction(nameof(GetActivity), new { id = activity.Id }, createdActivityDto);
+            return CreatedAtAction(nameof(GetActivity), new { id = activityDto.Id }, activityDto);
         }
 
         // PUT: api/ActivityEntity/5
         [HttpPut("{id}")]
         [Authorize(Roles = $"{Roles.MODERATOR}, {Roles.ADMIN}, {Roles.USER_ENTERPRISE}")]
-        public async Task<IActionResult> UpdateActivity(int id, ActivityEditionDto activityDto)
+        public async Task<IActionResult> UpdateActivity(int id, ActivityEditionDto activityEditionDto)
         {
             int organizerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             string role = User.FindFirst(ClaimTypes.Role)?.Value ?? "0";
 
-            if (id != activityDto.Id)
+            try
             {
-                return BadRequest();
+                await _activityService.UpdateActivityAsync(activityEditionDto, organizerId, role);
+                return Ok();
             }
-
-            // Mapper le DTO vers l'entité ActivityEntity à mettre à jour
-            var activity = _mapper.Map<ActivityEntity>(activityDto);
-
-            var updated = await _activityService.UpdateActivityAsync(activity, organizerId, role);
-
-            if (!updated)
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
-
-            return Ok(activity);
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/ActivityEntity/5
-        [HttpPatch("patch/{id}")]
+        [HttpPatch("ActivityArchive/{id}")]
         [Authorize(Roles = $"{Roles.ADMIN}")]
         public async Task<IActionResult> ArchiveActivity(int id)
         {
             string role = User.FindFirst(ClaimTypes.Role)?.Value ?? "0";
 
-            await _activityService.ArchiveActivityAsync(id, role);
-
-            return Ok();
+            try
+            {
+                await _activityService.ArchiveActivityAsync(id, role);
+                return Ok();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: api/ActivityEntity/5
@@ -130,14 +145,23 @@ namespace MyApi.API.Controllers
             int organizerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             string role = User.FindFirst(ClaimTypes.Role)?.Value ?? "0";
 
-            var deleted = await _activityService.DeleteActivityAsync(id, organizerId, role);
-
-            if (!deleted)
+            try
+            {
+                await _activityService.DeleteActivityAsync(id, organizerId, role);
+                return Ok();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
-
-            return Ok();
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }
