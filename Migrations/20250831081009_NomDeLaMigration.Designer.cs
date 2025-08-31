@@ -11,8 +11,8 @@ using MyApi.Infrastructure.Data;
 namespace MyApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250323095556_RegistrationActivities")]
-    partial class RegistrationActivities
+    [Migration("20250831081009_NomDeLaMigration")]
+    partial class NomDeLaMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,8 +71,14 @@ namespace MyApi.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("DisLikes")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("int");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -116,6 +122,33 @@ namespace MyApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MyApi.Domain.Entities.VoteEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Activity_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Activity_id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("ActivityEntityUserEntity", b =>
                 {
                     b.HasOne("MyApi.Domain.Entities.ActivityEntity", null)
@@ -144,6 +177,25 @@ namespace MyApi.Migrations
                         .HasForeignKey("RegisteredsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MyApi.Domain.Entities.VoteEntity", b =>
+                {
+                    b.HasOne("MyApi.Domain.Entities.ActivityEntity", "Activity")
+                        .WithMany()
+                        .HasForeignKey("Activity_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyApi.Domain.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -52,23 +52,21 @@ namespace MyApi.Infrastructure.Repositories
         // Mettre à jour une activité existante
         public async Task<bool> UpdateActivityAsync(ActivityEntity activity)
         {
-            var existingActivity = await _context.Activities
-                .AsNoTracking()
+            var existing = await _context.Activities
+                .Include(a => a.Organizers)
+                .Include(a => a.Registereds)
                 .FirstOrDefaultAsync(a => a.Id == activity.Id);
 
-            if (existingActivity == null)
-            {
-                return false; // L'activité n'existe pas
-            }
+            if (existing == null)
+                return false;
 
-            existingActivity = activity;
-
-            _context.Activities.Update(existingActivity);
+            // Update des propriétés simples
+            _context.Entry(existing).CurrentValues.SetValues(activity);
 
             await _context.SaveChangesAsync();
-
             return true;
         }
+
 
         // Supprimer une activité
         public async Task<bool> DeleteActivityAsync(int id)

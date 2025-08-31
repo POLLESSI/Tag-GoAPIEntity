@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace MyApi.Domain.Entities
 {
@@ -28,6 +29,10 @@ namespace MyApi.Domain.Entities
 
         [Required]
         public bool Active { get; set; }
+
+        public int Likes { get; set; }
+        
+        public int DisLikes { get; set; }
 
         // Navigation property
         public ICollection<UserEntity> Organizers { get; set; } = [];

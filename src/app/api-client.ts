@@ -922,7 +922,6 @@ export class ActivityEditionDto implements IActivityEditionDto {
     description?: string | undefined;
     additionalInformation?: string | undefined;
     location?: string | undefined;
-    active?: boolean;
 
     constructor(data?: IActivityEditionDto) {
         if (data) {
@@ -943,7 +942,6 @@ export class ActivityEditionDto implements IActivityEditionDto {
             this.description = _data["description"];
             this.additionalInformation = _data["additionalInformation"];
             this.location = _data["location"];
-            this.active = _data["active"];
         }
     }
 
@@ -964,7 +962,6 @@ export class ActivityEditionDto implements IActivityEditionDto {
         data["description"] = this.description;
         data["additionalInformation"] = this.additionalInformation;
         data["location"] = this.location;
-        data["active"] = this.active;
         return data;
     }
 }
@@ -978,7 +975,6 @@ export interface IActivityEditionDto {
     description?: string | undefined;
     additionalInformation?: string | undefined;
     location?: string | undefined;
-    active?: boolean;
 }
 
 export class UserCreationDto implements IUserCreationDto {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Base : Migration
+    public partial class NomDeLaMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,7 +33,9 @@ namespace MyApi.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Location = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Active = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Active = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Likes = table.Column<int>(type: "int", nullable: false),
+                    DisLikes = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,7 +65,7 @@ namespace MyApi.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ActivityEntityUserEntity",
+                name: "ActivityOrganizers",
                 columns: table => new
                 {
                     OrganizedActivitiesId = table.Column<int>(type: "int", nullable: false),
@@ -71,15 +73,15 @@ namespace MyApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivityEntityUserEntity", x => new { x.OrganizedActivitiesId, x.OrganizersId });
+                    table.PrimaryKey("PK_ActivityOrganizers", x => new { x.OrganizedActivitiesId, x.OrganizersId });
                     table.ForeignKey(
-                        name: "FK_ActivityEntityUserEntity_Activities_OrganizedActivitiesId",
+                        name: "FK_ActivityOrganizers_Activities_OrganizedActivitiesId",
                         column: x => x.OrganizedActivitiesId,
                         principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActivityEntityUserEntity_Users_OrganizersId",
+                        name: "FK_ActivityOrganizers_Users_OrganizersId",
                         column: x => x.OrganizersId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -87,17 +89,93 @@ namespace MyApi.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "ActivityRegistrations",
+                columns: table => new
+                {
+                    RegisteredActivitiesId = table.Column<int>(type: "int", nullable: false),
+                    RegisteredsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityRegistrations", x => new { x.RegisteredActivitiesId, x.RegisteredsId });
+                    table.ForeignKey(
+                        name: "FK_ActivityRegistrations_Activities_RegisteredActivitiesId",
+                        column: x => x.RegisteredActivitiesId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActivityRegistrations_Users_RegisteredsId",
+                        column: x => x.RegisteredsId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Votes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Value = table.Column<int>(type: "int", nullable: true),
+                    Text = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    User_id = table.Column<int>(type: "int", nullable: false),
+                    Activity_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Votes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Votes_Activities_Activity_id",
+                        column: x => x.Activity_id,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Votes_Users_User_id",
+                        column: x => x.User_id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
-                name: "IX_ActivityEntityUserEntity_OrganizersId",
-                table: "ActivityEntityUserEntity",
+                name: "IX_ActivityOrganizers_OrganizersId",
+                table: "ActivityOrganizers",
                 column: "OrganizersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityRegistrations_RegisteredsId",
+                table: "ActivityRegistrations",
+                column: "RegisteredsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_Activity_id",
+                table: "Votes",
+                column: "Activity_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_User_id",
+                table: "Votes",
+                column: "User_id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ActivityEntityUserEntity");
+                name: "ActivityOrganizers");
+
+            migrationBuilder.DropTable(
+                name: "ActivityRegistrations");
+
+            migrationBuilder.DropTable(
+                name: "Votes");
 
             migrationBuilder.DropTable(
                 name: "Activities");

@@ -77,10 +77,12 @@ namespace MyApi.Application.Services
 
             ActivityEntity activity = _mapper.Map<ActivityEntity>(activityEditionDto);
 
+            activity.Active = true;
+
             bool success = await _activityRepository.UpdateActivityAsync(activity);
             if (!success)
             {
-                throw new InvalidOperationException("Failed to delete the activity. Please try again.");
+                throw new InvalidOperationException("Failed to update the activity. Please try again.");
             }
 
             return true;

@@ -12,6 +12,7 @@ namespace MyApi.Infrastructure.Data
 
         public required DbSet<ActivityEntity> Activities { get; set; }
         public required DbSet<UserEntity> Users { get; set; }
+        public required DbSet<VoteEntity> Votes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

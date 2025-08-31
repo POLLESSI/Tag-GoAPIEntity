@@ -81,7 +81,7 @@ namespace MyApi.API.Controllers
                 return BadRequest();
             }
 
-            return CreatedAtAction(nameof(GetActivity), new { id = activityDto.Id }, activityDto);
+            return Ok(activityDto);
         }
 
         // PUT: api/ActivityEntity/5

@@ -11,9 +11,11 @@ namespace MyApi.Extensions
         {
             services.AddScoped<IActivityRepository, ActivityRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IVoteRepository, VoteRepository>();
 
             services.AddScoped<IActivityService, ActivityService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IVoteService, VoteService>();
 
             return services;
         }

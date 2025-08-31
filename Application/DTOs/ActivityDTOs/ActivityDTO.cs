@@ -14,6 +14,9 @@ namespace MyApi.Application.DTOs.ActivityDTOs
         public string? AdditionalInformation { get; set; }
         public string? Location { get; set; } 
         public bool Active { get; set; }
+        public int Likes { get; set; }
+        public int DisLikes { get; set; }
+
         public ICollection<UserDto> Organizers { get; set; } = [];
     }
 }
